@@ -4,8 +4,8 @@ pragma solidity 0.8.24;
 import {IRouterClient} from "@chainlink/contracts-ccip/contracts/interfaces/IRouterClient.sol";
 
 import {Client} from "@chainlink/contracts-ccip/contracts/libraries/Client.sol";
-import {OwnerIsCreator} from "@chainlink/contracts@1.4.0/src/v0.8/shared/access/OwnerIsCreator.sol";
-import {LinkTokenInterface} from "@chainlink/contracts@1.4.0/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
+import {OwnerIsCreator} from "@chainlink/contracts/src/v0.8/shared/access/OwnerIsCreator.sol";
+import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/shared/interfaces/LinkTokenInterface.sol";
 
 /**
  * THIS IS AN EXAMPLE CONTRACT THAT USES HARDCODED VALUES FOR CLARITY.
@@ -17,7 +17,7 @@ import {LinkTokenInterface} from "@chainlink/contracts@1.4.0/src/v0.8/shared/int
 contract Sender is OwnerIsCreator {
   // Custom errors to provide more descriptive revert messages.
   error NotEnoughBalance(uint256 currentBalance, uint256 calculatedFees); // Used to make sure contract has enough
-  // balance.
+    // balance.
 
   // Event emitted when a message is sent to another chain.
   // The chain selector of the destination chain.
@@ -74,8 +74,8 @@ contract Sender is OwnerIsCreator {
         Client.GenericExtraArgsV2({
           gasLimit: 200_000, // Gas limit for the callback on the destination chain
           allowOutOfOrderExecution: true // Allows the message to be executed out of order relative to other messages
-          // from
-          // the same sender
+            // from
+            // the same sender
         })
       ),
       // Set the feeToken  address, indicating LINK will be used for fees
