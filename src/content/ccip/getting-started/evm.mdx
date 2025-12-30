@@ -353,9 +353,39 @@ npx hardhat run scripts/verify-cross-chain-message.ts
 
   </Fragment>
 
-  <Fragment slot="panel.2">
+<Fragment slot="panel.2">
 
-Foundry content will be added soon.
+## Foundry
+
+### Why consider forked environments?
+
+<Aside type="note" title="Why consider forked environments?">
+Working in forked environments has several advantages over working with an online environment like Remix:
+
+- **Faster development time**: You can test your contracts much faster by using pre-configured
+  blockchain states that you would have to otherwise set up from scratch for every test run on online
+  environments.
+- **Production-like testing**: Forked environments allow you to more closely mimic the production
+  environment by using the same blockchain states as the chains you will be deploying to.
+- **Remove the need for a faucet**: Since you can fund any account on a forked environment.
+  </Aside>
+
+### Set up a Foundry project to simulate CCIP locally
+
+We created the [CCIP Foundry Starter Kit](https://github.com/smartcontractkit/ccip-starter-kit-foundry) to allow devs to easily simulate CCIP inside a Foundry project.
+You are also welcome to set up your own environment from scratch by porting the config from the starter kit to your own project.
+
+1. Clone the CCIP Foundry Starter Kit into your local machine.
+
+```bash filename="terminal"
+git clone https://github.com/smartcontractkit/ccip-starter-kit-foundry.git && cd ./ccip-starter-kit-foundry/
+```
+
+2. Install the dependencies:
+
+```bash filename="terminal"
+forge install
+```
 
   </Fragment>
 </Tabs>
