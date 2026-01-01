@@ -1,7 +1,7 @@
 ---
 section: ccip
 date: Last Modified
-title: "Getting Started (EVM)"
+title: "Get Started with CCIP (EVM)"
 metadata:
   description: "Get started with Chainlink CCIP on EVM chains. Deploy sender/receiver contracts, send data cross-chain, and pay fees in LINK."
   excerpt: "Chainlink CCIP, EVM chains, Ethereum, Avalanche, Cross-chain messaging, Solidity contracts, LINK token, Remix IDE, MetaMask, Testnet"
@@ -19,40 +19,39 @@ whatsnext:
 ---
 
 import { Callout } from "@components/Callout/Callout.tsx"
-import { Tabs } from "@components/Tabs"
-import { CodeSample, ClickToZoom, CopyText, Aside } from "@components"
+import { Accordion, CodeSample, ClickToZoom, CopyText, Aside } from "@components"
 import CcipCommon from "@features/ccip/CcipCommon.astro"
 
 <CcipCommon callout="talkToExpert" />
 
-A simple use case for Chainlink CCIP is sending data between smart contracts on different blockchains. This guide shows you how to deploy a CCIP sender contract and a CCIP receiver contract to two different blockchains and send data from the sender contract to the receiver contract. You pay the CCIP fees using LINK.
+**Build and run a secure cross-chain messaging workflow between two EVM chains using Chainlink CCIP.**
 
-Fees can also be paid in alternative assets, which currently include the native gas tokens of the source blockchain and their ERC20 wrapped version. For example, you can pay ETH or WETH when you send transactions to the CCIP router on Ethereum and AVAX or WAVAX when you send transactions to the CCIP router on Avalanche.
+In this guide, you will:
+
+1. Deploy a sender on a source chain
+2. Deploy a receiver on a destination chain
+3. Send and verify a cross-chain message
 
 ## Before you begin
 
-- If you are new to smart contract development, learn how to [Deploy Your First Smart Contract](/quickstarts/deploy-your-first-contract) so you are familiar with the tools that are necessary for this guide:
-  - The [Solidity](https://soliditylang.org/) programming language
-  - The [MetaMask](https://metamask.io) wallet.
-  - Either one of the following development environments:
-    - [Hardhat](https://hardhat.org/docs/getting-started), or,
-    - [Foundry](https://book.getfoundry.sh/)
-  - If you prefer to use Hardhat:
-    - Acquire testnet funds. This guide requires testnet AVAX and LINK on _Avalanche Fuji_. It also requires testnet ETH on _Ethereum Sepolia_.
-      - Go to [faucets.chain.link](https://faucets.chain.link/) to get your testnet tokens.
-      - If you need to use different networks, you can find more faucets on the [LINK Token Contracts](/resources/link-token-contracts) page.
-    - Learn how to [Fund your contract with LINK](/resources/fund-your-contract).
+You will need:
 
-  <Callout type="note" title="Using Foundry?">
-    You don't need to acquire testnet tokens or fund your contract with LINK for the Foundry version of this guide,
-    since it uses [fork testing](/chainlink-local/build/ccip/foundry/forking-mainnets).
-  </Callout>
+- Basic [Solidity](https://soliditylang.org/) and [smart contract deployment](/quickstarts/deploy-your-first-contract) experience
+- One [wallet](https://metamask.io/) funded on two CCIP-supported EVM testnets
 
-<br />
+- Choose one of the following development environments:
+  - **[Hardhat](https://hardhat.org/docs/getting-started) (recommended)**
+    Best for a **script-driven workflow** where you deploy contracts, send a CCIP message, and verify delivery from the command line. Ideal for getting a full end-to-end CCIP flow running quickly.
+
+  - **[Foundry](https://book.getfoundry.sh/)**
+    Best for **Solidity-native, test-driven workflows**, where CCIP messaging is validated through tests and assertions rather than scripts.
+
+  - **[Remix](https://remix.ethereum.org/)**
+    Suitable only for **quick, disposable demos**. Not recommended for testing, iteration, or production workflows.
 
 ## Examine the example code
 
-### Sender code
+<Accordion title="Sender code" number={1}>
 
 The smart contract in this tutorial is designed to interact with CCIP to send data. The contract code includes comments to clarify the various functions, events, and underlying logic. However, this section explains the key elements. You can see the full contract code below.
 
@@ -85,7 +84,9 @@ The `sendMessage` function completes several operations:
 
 <CcipCommon callout="senderContractCallout" />
 
-### Receiver code
+</Accordion>
+
+<Accordion title="Receiver code" number={2}>
 
 The smart contract in this tutorial is designed to interact with CCIP to receive data. The contract code includes comments to clarify the various functions, events, and underlying logic. However, this section explains the key elements. You can see the full contract code below.
 
@@ -117,17 +118,13 @@ Note that the receiver contract in this example inherits from the base contract 
 
 </Aside>
 
+</Accordion>
+
 ## Send a cross-chain message using CCIP
 
-<Tabs client:visible>
-  <Fragment slot="tab.1">Hardhat</Fragment>
-  <Fragment slot="tab.2">Foundry</Fragment>
+### Hardhat
 
-  <Fragment slot="panel.1">
-  
-## Hardhat
-
-### Bootstrap a new Hardhat project
+<Accordion title="Bootstrap a new Hardhat project" number={1}>
 
 1. Open a new terminal in a directory of your choice and run this command:
 
@@ -189,7 +186,9 @@ export default defineConfig({
 })
 ```
 
-### Set up the contracts
+</Accordion>
+
+<Accordion title="Set up the contracts" number={2}>
 
 1. Create a new directory named `contracts` for your smart contracts if it doesn't already exist.
 2. Create a new file named `Sender.sol` in this directory and paste the sender contract code inside it.
@@ -214,7 +213,9 @@ interface IERC20Extended is IERC20 {}
 npx hardhat build
 ```
 
-### Set up the scripts
+</Accordion>
+
+<Accordion title="Send a cross-chain message using CCIP" number={3}>
 
 1. Create a new directory named `scripts` at the root of the project if it doesn't already exist.
 2. Create a new file named `send-cross-chain-message.ts` in this directory and paste the following code inside it:
@@ -351,15 +352,12 @@ npx hardhat run scripts/verify-cross-chain-message.ts
 
 6. You should see the message ID and text of the last received message printed in the terminal.
 
-  </Fragment>
+</Accordion>
 
-<Fragment slot="panel.2">
+### Foundry
 
-## Foundry
+{/\* <Accordion title="Why consider forked environments?" number={1}>
 
-### Why consider forked environments?
-
-<Aside type="note" title="Why consider forked environments?">
 Working in forked environments has several advantages over working with an online environment like Remix:
 
 - **Faster development time**: You can test your contracts much faster by using pre-configured
@@ -371,24 +369,4 @@ Working in forked environments has several advantages over working with an onlin
 
 learn more about forked environments in the [Chainlink Local documentation](/chainlink-local/learn/architecture).
 
-</Aside>
-
-### Set up a Foundry project to simulate CCIP locally
-
-We created the [CCIP Foundry Starter Kit](https://github.com/smartcontractkit/ccip-starter-kit-foundry) to allow devs to easily simulate CCIP inside a Foundry project.
-You are also welcome to set up your own environment from scratch by porting the config from the starter kit to your own project.
-
-1. Clone the CCIP Foundry Starter Kit into your local machine and navigate to the project directory:
-
-```bash filename="terminal"
-git clone https://github.com/smartcontractkit/ccip-starter-kit-foundry.git && cd ./ccip-starter-kit-foundry/
-```
-
-2. Install the dependencies:
-
-```bash filename="terminal"
-forge install
-```
-
-  </Fragment>
-</Tabs>
+</Accordion> */}
