@@ -356,4 +356,76 @@ npx hardhat run scripts/verify-cross-chain-message.ts
 
 ### Foundry
 
-Foundry content coming soon...
+<Accordion title="Bootstrap a new Foundry project" number={1}>
+
+1. Open a new terminal in a directory of your choice and run this command to initialize a new Foundry project at the root:
+
+```bash filename="terminal"
+forge init
+```
+
+2. Install the required dependencies:
+
+```bash filename="terminal"
+forge install smartcontractkit/chainlink-ccip smartcontractkit/chainlink-evm OpenZeppelin/openzeppelin-contracts
+```
+
+3. Configure the remappings so that your `foundry.toml` file looks like this:
+
+```toml filename="foundry.toml"
+[profile.default]
+solc = "0.8.24"
+src = "src"
+out = "out"
+libs = ["lib"]
+
+remappings = [
+  "forge-std/=lib/forge-std/src/",
+  "@chainlink/contracts-ccip/contracts/=lib/chainlink-ccip/contracts/",
+  "@chainlink/contracts/src/v0.8/=lib/chainlink-evm/src/v0.8/",
+  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+]
+```
+
+4. Create a `.env` at the root of the project with the following variables:
+
+```env filename=".env"
+PRIVATE_KEY=0x...
+SEPOLIA_RPC_URL=https://...
+FUJI_RPC_URL=https://...
+```
+
+</Accordion>
+
+<Accordion title="Set up the contracts" number={2}>
+
+1. Create a new directory named `src` at the root of the project if it doesn't already exist.
+2. Create a new file named `Sender.sol` in this directory and paste the sender contract code inside it.
+3. Create a new file named `Receiver.sol` in the same directory and paste the receiver contract code inside it.
+4. Create a `src/interfaces` directory and create a new file named `IERC20.sol` inside it. Our script will need to make a call to the `LINK ERC-20` contract to transfer LINK to the sender contract.
+   It will need access to an ERC-20 interface to be able to call the `transfer` function.
+5. Paste the following code into the `IERC20.sol` file:
+
+```solidity filename="contracts/interfaces/IERC20.sol"
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+// Re-export OpenZeppelin's IERC20 interface
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+interface IERC20Extended is IERC20 {}
+```
+
+6. Run the following command to compile the contracts:
+
+```bash filename="terminal"
+forge build
+```
+
+</Accordion>
+
+<Accordion title="Send a cross-chain message using CCIP" number={3}>
+
+Content coming soon...
+
+</Accordion>
