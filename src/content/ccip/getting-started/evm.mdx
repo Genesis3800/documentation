@@ -538,4 +538,51 @@ forge script script/SendCrossChainMessage.s.sol:SendCrossChainMessage --broadcas
   by using the `-vvvv` verbosity flag.
 </Aside>
 
+4. Create a new file named `VerifyCrossChainMessage.s.sol` in the `script` directory and paste the following code inside it:
+
+```solidity filename="script/VerifyCrossChainMessage.s.sol"
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity 0.8.24;
+
+import {Script, console} from "forge-std/Script.sol";
+import {Receiver} from "../src/Receiver.sol";
+
+contract VerifyCrossChainMessage is Script {
+
+    bytes32 constant ZERO_BYTES32 = bytes32(0);
+
+    function run() public {
+
+        address receiverAddress = PASTE_RECEIVER_ADDRESS_HERE;
+        require(receiverAddress != address(0), "Set RECEIVER_ADDRESS (in .env or in script)");
+
+        console.log("Connecting to Ethereum Sepolia...");
+        uint256 sepoliaFork = vm.createFork(vm.rpcUrl("sepolia"));
+        vm.selectFork(sepoliaFork);
+
+        console.log("Checking for received message...\n");
+        Receiver receiver = Receiver(receiverAddress);
+
+        (bytes32 messageId, string memory text) = receiver
+            .getLastReceivedMessageDetails();
+
+        if (messageId == ZERO_BYTES32) {
+            console.log("No message received yet.");
+            console.log("Please wait a bit longer and try again.");
+            revert("No message received yet");
+        }
+
+        console.log("Received Message ID:");
+        console.logBytes32(messageId);
+        console.log(string.concat('Received Text: "', text, '"'));
+    }
+}
+```
+
+5. Run the following command to verify the cross-chain message:
+
+```bash filename="terminal"
+forge script script/VerifyCrossChainMessage.s.sol:VerifyCrossChainMessage
+```
+
 </Accordion>
