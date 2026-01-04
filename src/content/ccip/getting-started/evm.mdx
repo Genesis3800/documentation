@@ -386,6 +386,11 @@ remappings = [
   "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
   "@openzeppelin/contracts@5.0.2/=lib/openzeppelin-contracts/contracts/",
 ]
+
+# RPC URLs will be fed to our script via Foundry's config file
+[rpc_endpoints]
+sepolia = "${SEPOLIA_RPC_URL}"
+fuji = "${FUJI_RPC_URL}"
 ```
 
 4. Create a `.env` at the root of the project with the following variables:
@@ -395,6 +400,11 @@ PRIVATE_KEY=0x...
 SEPOLIA_RPC_URL=https://...
 FUJI_RPC_URL=https://...
 ```
+
+<Aside type="note">
+  You might need to run `source .env` to load the environment variables into your terminal session to access them in
+  your script.
+</Aside>
 
 </Accordion>
 
